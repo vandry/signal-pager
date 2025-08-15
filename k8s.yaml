@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: signal-pager
+  name: signal-pager
+  namespace: signal
+spec:
+  selector:
+    matchLabels:
+      app: signal-pager
+  template:
+    metadata:
+      labels:
+        app: signal-pager
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: "9090"
+        prometheus.io/scrape: "true"
+    spec:
+      containers:
+        - name: signal-pager
+          image: docker.io/vandry/signal-pager@sha256:092b26922ac0fa813aaf0c7130e58ae3efc543523f482157ee1af414d408d805
+          command:
+          - "/app/signal-pager"
+          - "--s3-endpoint=........"
+          - "--s3-region-name=........"
+          - "--bucket-name=........"
+          - "--encryption-key=/secret/bucket-key"
+          - "--receiver-http-port=9709"
+          - "--signal-phone-number=........"
+          - "--signal-group-id=........"
+          - "--signal-bin=/app/signal-cli"
+          - "--diag-http-port=9090"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9709
+              protocol: TCP
+          env:
+          - name: RUST_LOG
+            value: info
+          volumeMounts:
+            - mountPath: "/dev/shm/.aws"
+              name: s3-credentials
+            - mountPath: "/secret"
+              name: bucket-key
+      volumes:
+        - name: s3-credentials
+          secret:
+            secretName: s3.credentials
+        - name: bucket-key
+          secret:
+            secretName: bucket-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alertmanager-signal-receiver
+  namespace: signal
+spec:
+  ports:
+    - port: 9709
+      protocol: TCP
+      targetPort: 9709
+  selector:
+    app: signal-pager
+  sessionAffinity: None
+  type: ClusterIP
