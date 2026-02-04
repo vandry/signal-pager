@@ -5,23 +5,23 @@ edition = "2024"
 
 [dependencies]
 aead = { version = "0.5.2", features = ["std"] }
-axum = "0.7"
+axum = "0.8"
 chacha20poly1305 = "0.10.1"
 clap = { version = "4.5", features = ["derive"] }
-comprehensive = "0.7"
-comprehensive_http = "0.2"
-comprehensive_s3 = "0.1"
+comprehensive = "0.9"
+comprehensive_http = "0.5"
+comprehensive_s3 = "0.3"
 crypto-common = "0.1.6"
-env_logger = "0.10"
 flate2 = "1.1.2"
 futures = "0.3.31"
 http = "1.3.1"
 log = "0.4.27"
 openssl = { version = "0.10", features = ["vendored"] }  # for musl build
 pin-project-lite = "0.2.16"
-rust-s3 = "0.35"
+rust-s3 = "0.37"
 serde = "1.0.219"
 tar = "0.4.44"
 tempfile = "3.20.0"
 thiserror = "2.0.12"
 tokio = { version = "1.40", features = ["macros", "rt-multi-thread"] }
+tracing-subscriber = { version = "0.3.20", features = ["env-filter"] }
