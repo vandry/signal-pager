@@ -1,16 +1,11 @@
-use comprehensive::ResourceDependencies;
 use comprehensive_http::HttpServer;
+use std::marker::PhantomData;
 use std::sync::Arc;
 
+mod grpc;
 mod http;
 mod signal;
 mod state;
-
-#[derive(ResourceDependencies)]
-struct TopDependencies {
-    _http: Arc<HttpServer<http::HttpApi>>,
-    _diag: Arc<comprehensive_http::diag::HttpServer>,
-}
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -18,8 +13,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_writer(std::io::stderr)
         .with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
         .init();
-    comprehensive::Assembly::<TopDependencies>::new()?
-        .run()
-        .await?;
+    comprehensive::Assembly::<(
+        Arc<HttpServer<http::HttpApi>>,
+        Arc<comprehensive_http::diag::HttpServer>,
+        Arc<comprehensive_grpc::server::GrpcServer>,
+        PhantomData<grpc::PagerService>,
+        PhantomData<comprehensive_spiffe::SpiffeTlsProvider>,
+    )>::new()?
+    .run()
+    .await?;
     Ok(())
 }

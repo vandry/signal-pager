@@ -31,6 +31,12 @@ impl From<SignalRunnerError> for (http::StatusCode, String) {
     }
 }
 
+impl From<SignalRunnerError> for tonic::Status {
+    fn from(e: SignalRunnerError) -> tonic::Status {
+        tonic::Status::internal(e.to_string())
+    }
+}
+
 #[derive(ResourceDependencies)]
 pub struct SignalRunnerDependencies(Arc<crate::state::SignalState>);
 

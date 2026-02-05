@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package pager;
+
+import "google/protobuf/empty.proto";
+
+message PageRequest {
+  optional string message = 1;
+}
+
+service Pager {
+  rpc Page(PageRequest) returns (google.protobuf.Empty) {}
+}

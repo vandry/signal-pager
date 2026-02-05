@@ -9,19 +9,29 @@ axum = "0.8"
 chacha20poly1305 = "0.10.1"
 clap = { version = "4.5", features = ["derive"] }
 comprehensive = "0.9"
-comprehensive_http = "0.5"
+comprehensive_grpc = { version = "0.9", features = ["tls"] }
+comprehensive_http = { version = "0.5", features = ["tls"] }
 comprehensive_s3 = "0.3"
+comprehensive_spiffe = "0.4"
 crypto-common = "0.1.6"
 flate2 = "1.1.2"
 futures = "0.3.31"
 http = "1.3.1"
+itertools = "0.14.0"
 log = "0.4.27"
 openssl = { version = "0.10", features = ["vendored"] }  # for musl build
 pin-project-lite = "0.2.16"
+prost = "0.14.1"
 rust-s3 = "0.37"
 serde = "1.0.219"
 tar = "0.4.44"
 tempfile = "3.20.0"
 thiserror = "2.0.12"
 tokio = { version = "1.40", features = ["macros", "rt-multi-thread"] }
+tonic = "0.14.2"
+tonic-prost = "0.14.2"
 tracing-subscriber = { version = "0.3.20", features = ["env-filter"] }
+x509-parser = "0.18.0"
+
+[build-dependencies]
+tonic-prost-build = "0.14.2"
