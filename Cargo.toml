@@ -3,6 +3,14 @@ name = "signal-pager"
 version = "0.1.0"
 edition = "2024"
 
+[[bin]]
+name = "signal-pager"
+path = "src/main.rs"
+
+[[bin]]
+name = "signal-pager-relay"
+path = "src/relay.rs"
+
 [dependencies]
 aead = { version = "0.5.2", features = ["std"] }
 axum = "0.8"
